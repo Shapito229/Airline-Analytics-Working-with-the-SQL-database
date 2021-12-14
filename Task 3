@@ -1,0 +1,18 @@
+SELECT subq.city,
+       avg(subq.cnt_flights) AS average_flights
+FROM
+    (SELECT airports.city AS city,
+            count(flights.flight_id) AS cnt_flights       
+     FROM flights
+     JOIN airports ON airports.airport_code = flights.arrival_airport
+     WHERE flights.arrival_time :: date  BETWEEN '2018-08-01' AND '2018-08-31'
+     GROUP BY airports.city,
+              EXTRACT(DAY FROM flights.arrival_time :: date)) AS subq
+GROUP BY subq.city
+
+Result
+city	      average_flights
+Абакан	    3.87097
+Анадырь	    1
+Анапа	      2.16129
+Архангельск	5.35484
