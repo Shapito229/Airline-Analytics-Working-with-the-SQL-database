@@ -1,0 +1,37 @@
+SELECT 
+	subq3.week_number,
+	subq3.ticket_amount,
+	subq3.festival_week,
+	subq3.festival_name
+FROM (
+(
+  SELECT EXTRACT(week from flights.arrival_time :: date) AS week_number,
+          COUNT(ticket_flights.ticket_no) AS ticket_amount
+  FROM flights
+  JOIN airports ON airports.airport_code = flights.arrival_airport
+  JOIN ticket_flights on ticket_flights.flight_id = flights.flight_id
+  WHERE airports.city = 'Москва' AND
+        flights.arrival_time :: date BETWEEN '2018-07-23' AND '2018-09-30'
+  GROUP BY week_number
+) subq1
+LEFT JOIN 
+(SELECT 		
+		festival_name,	
+		EXTRACT (week FROM festivals.festival_date) AS festival_week
+	FROM 
+		festivals
+	WHERE
+		festival_city = 'Москва'
+	  AND festivals.festival_date :: date BETWEEN '2018-07-23' AND '2018-09-30'
+) subq2 
+ON 
+	subq1.week_number = subq2.festival_week
+) AS subq3
+    
+Result
+week_number	  ticket_amount	  festival_week	  festival_name
+33	          51378	          nan	
+31	          51034	          31	            Пикник Афиши
+38	          51518	          nan	
+30	          43568	          30	            Park Live
+32	          51675	          nan	
