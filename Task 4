@@ -1,0 +1,15 @@
+select
+    festival_name,
+    EXTRACT(week FROM festival_date::date) AS festival_week
+from festivals 
+   
+where 
+    CAST(festivals.festival_date  as date) between '2018-07-23' and '2018-09-30'
+    and
+    festival_city = 'Москва'
+    
+Result
+festival_name	  festival_week
+Park Live	      30
+Пикник Афиши	  31
+Видфест	        36
