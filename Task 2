@@ -1,0 +1,27 @@
+select
+    
+    count(model) as m,
+    case when model = 'Airbus A319-100' or model = 'Airbus A321-200' then
+        'Airbus'
+    when model = 'Boeing 767-300' or model = 'Boeing 737-300' or model = 'Boeing 777-300' then
+        'Boeing'
+    else
+        'other'
+    end as flights_amount
+from aircrafts
+
+    INNER JOIN flights on aircrafts.aircraft_code  = flights.aircraft_code 
+where 
+    CAST(flights.departure_time as date) between '2018-09-01' and '2018-09-30'
+
+
+group by
+    flights_amount
+    
+    
+    Result
+    
+m	    flights_amount
+1567	Airbus
+1530	Boeing
+13188	other
